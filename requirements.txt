@@ -1,0 +1,10 @@
+transformers 
+datasets 
+evaluate 
+jiwer 
+bitsandbytes 
+accelerate 
+pydub
+peft
+torch 
+torchaudio
