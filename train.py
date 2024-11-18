@@ -15,24 +15,26 @@ CHECKPOINT_FOLDER = "checkpoints"
 SAVE_FOLDER = 'saved_model'
 DATASET_PATH = 'hokkien_yt.hf'
 SEED = 42
+SPLIT_DATASET = 1/8
 
 processor = WhisperProcessor.from_pretrained(
     MODEL_NAME, language=LANGUAGE, task=TASK)
 
 
-def load_dataset(dataset_path):
+def fetch_dataset(dataset_path, split=None):
     dataset = load_dataset(dataset_path)
 
     # Shuffle dataset
     dataset['train'] = dataset['train'].shuffle(seed=SEED)
     dataset['test'] = dataset['test'].shuffle(seed=SEED)
 
-    new_train_size = len(dataset['train']) // 8
-    new_test_size = len(dataset['test']) // 8
+    if split:
+        new_train_size = len(dataset['train']) * split
+        new_test_size = len(dataset['test']) * split
 
-    # Take the first 1/8 of the dataset
-    dataset['train'] = dataset['train'].select(range(new_train_size))
-    dataset['test'] = dataset['test'].select(range(new_test_size))
+        # Take the first 1/8 of the dataset
+        dataset['train'] = dataset['train'].select(range(new_train_size))
+        dataset['test'] = dataset['test'].select(range(new_test_size))
 
     return dataset
 
@@ -169,7 +171,7 @@ def train(model, dataset, save=None):
 
 
 if __name__ == '__main__':
-    dataset = load_dataset(DATASET_PATH)
+    dataset = fetch_dataset(DATASET_PATH, split=SPLIT_DATASET)
     dataset = prepare_dataset(dataset)
 
     quantization_config = BitsAndBytesConfig(load_in_8bit=True)
