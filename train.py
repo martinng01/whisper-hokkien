@@ -30,7 +30,7 @@ def fetch_dataset(dataset_path, split=None):
 
     if split:
         new_train_size = len(dataset['train']) * split
-        new_test_size = len(dataset['test']) * split
+        new_test_size = len(dataset['test']) * (split / 3)
 
         # Take the first 1/8 of the dataset
         dataset['train'] = dataset['train'].select(range(int(new_train_size)))
