@@ -33,8 +33,8 @@ def fetch_dataset(dataset_path, split=None):
         new_test_size = len(dataset['test']) * split
 
         # Take the first 1/8 of the dataset
-        dataset['train'] = dataset['train'].select(range(new_train_size))
-        dataset['test'] = dataset['test'].select(range(new_test_size))
+        dataset['train'] = dataset['train'].select(range(int(new_train_size)))
+        dataset['test'] = dataset['test'].select(range(int(new_train_size)))
 
     return dataset
 
@@ -181,6 +181,6 @@ if __name__ == '__main__':
             model_checkpoint, quantization_config=quantization_config, device_map="auto")
     else:
         model = WhisperForConditionalGeneration.from_pretrained(
-            CHECKPOINT_FOLDER, quantization_config=quantization_config, device_map="auto")
+            MODEL_NAME, quantization_config=quantization_config, device_map="auto")
 
     train(model, dataset, save=SAVE_FOLDER)
