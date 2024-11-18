@@ -181,6 +181,6 @@ if __name__ == '__main__':
             model_checkpoint, quantization_config=quantization_config, device_map="auto")
     else:
         model = WhisperForConditionalGeneration.from_pretrained(
-            CHECKPOINT_FOLDER, quantization_config=quantization_config, device_map="auto")
+            MODEL_NAME, quantization_config=quantization_config, device_map="auto")
 
     train(model, dataset, save=SAVE_FOLDER)
